@@ -1,0 +1,145 @@
+﻿@page
+@model FillableFormWebApp.Pages.employee.IndexModel
+@{
+    ViewData["Title"] = "Employee";
+}
+
+<div class="d-flex flex-wrap gap-3 justify-content-left mb-5">
+    <a href="/employee/newform" class="btn btn-primary"><i class="bi bi-file-earmark-plus me-1"></i>New Form</a>
+    <a href="/employee" class="btn btn-secondary"><i class="bi bi-arrow-clockwise me-1"></i>Refresh Forms</a>
+</div>
+
+<div class="table-responsive table-striped">
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width: 24%">Id</th>
+                <th style="width: 24%">Type</th>
+                <th style="width: 24%">Date</th>
+                <th style="width: 24%">Status</th>
+                <th style="width: 4%"></th>
+            </tr>
+        </thead>
+        <tbody>
+        @{
+            string tableColor = "bg-primary bg-gradient";
+            foreach (var form in Model.forms)
+            {
+                switch (form.Status)
+                {
+                    case "Open":
+                        tableColor = "table-primary";
+                        <tr id="trForm@{@form.FormId}"
+                            class="accordion-toggle collapsed @tableColor" 
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseForm@{@form.FormId}"
+                            aria-expanded="false"
+                            aria-controls="flush-collapseThree">
+
+                            <td scope="row">@form.FormId</td>
+                            <td>@form.FormType.FormTypeName</td>
+                            <td>@form.FormDate.Value.Date.ToShortDateString()</td>
+                            <td id="tdStatus@{@form.FormId}">@form.Status</td>
+                            <td id="expand@{@form.FormId}" class="expand-button"></td>
+                        </tr>
+                        <tr class="hide-table-padding">
+                            <td></td>
+                            <td colspan="3">
+                                <div id="collapseForm@{@form.FormId}" class="accordion-collapse collapse my-3" aria-labelledby="flush-headingThree" data-bs-parent="">
+                                    <div class="accordion-body">
+                                        <div class="col-10">
+                                            <div class="row">
+                                                <div class="col-12 col-lg-4">
+                                                    <div class="form-floating mb-3">
+                                                        <input class="form-control" aria-required="true" value="@form.TypeOfLeave" data-form="@form.FormId" readonly />
+                                                        <label class="form-label">Type Of Leave</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-lg-4">
+                                                    <div class="form-floating mb-3">
+                                                        <input class="form-control" aria-required="true" value="@form.Dates" data-form="@form.FormId" readonly />
+                                                        <label class="form-label">Dates</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-lg-4">
+                                                    <div class="form-floating mb-3">
+                                                        <input class="form-control" aria-required="true" value="@form.Supervisor.Employee.EmployeeName" data-form="@form.FormId" readonly />
+                                                        <label class="form-label">Supervisor</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-lg-6">
+                                                    <div class="form-floating mb-3">
+                                                        <textarea class="form-control" aria-required="true" data-form="@form.FormId" style="min-height: 100px" readonly>@form.Justification</textarea>
+                                                        <label class="form-label">Purpose for Leave</label>
+                                                    </div>
+                                                </div>
+                                                    @if (!String.IsNullOrEmpty(form.AdditionalRemarks))
+                                                {
+                                                    <div class="col-12 col-lg-6">
+                                                        <div class="form-floating mb-3">
+                                                                <textarea class="form-control" aria-required="true" data-form="@form.FormId" style="min-height: 100px" readonly>@form.AdditionalRemarks</textarea>
+                                                            <label class="form-label">Addtional Remarks</label>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        break;
+                    case "Disapproved":
+                        tableColor = "table-danger";
+                        <tr id="trForm@{@form.FormId}" class="accordion-toggle collapsed @tableColor">
+                            <td scope="row">@form.FormId</td>
+                            <td>@form.FormType.FormTypeName</td>
+                            <td>@form.FormDate.Value.Date.ToShortDateString()</td>
+                            <td id="tdStatus@{@form.FormId}">@form.Status</td>
+                            <td><i class="bi bi-eye-fill view-form" data-form="@form.FormId"></i></td>
+                        </tr>
+                        break;
+                    case "Approved":
+                        tableColor = "table-info";
+                        <tr id="trForm@{@form.FormId}" class="accordion-toggle collapsed @tableColor">
+                            <td scope="row">@form.FormId</td>
+                            <td>@form.FormType.FormTypeName</td>
+                                <td>@form.FormDate.Value.Date.ToShortDateString()</td>
+                            <td id="tdStatus@{@form.FormId}">@form.Status</td>
+                            <td><i class="bi bi-eye-fill view-form" data-form="@form.FormId"></i></td>
+                        </tr>
+                        break;
+                    case "Signed":
+                        tableColor = "table-success";
+                        <tr id="trForm@{@form.FormId}" class="accordion-toggle collapsed @tableColor">
+                            <td scope="row">@form.FormId</td>
+                            <td>@form.FormType.FormTypeName</td>
+                            <td>@form.FormDate.Value.Date.ToShortDateString()</td>
+                            <td id="tdStatus@{@form.FormId}">@form.Status</td>
+                            <td><i class="bi bi-eye-fill view-form" data-form="@form.FormId"></i></td>
+                        </tr>
+                        break;
+                    case "Closed":
+                        tableColor = "Secondary";
+                        <tr id="trForm@{@form.FormId}" class="accordion-toggle collapsed @tableColor">
+                            <td scope="row">@form.FormId</td>
+                            <td>@form.FormType.FormTypeName</td>
+                            <td>@form.FormDate.Value.Date.ToShortDateString()</td>
+                            <td id="tdStatus@{@form.FormId}">@form.Status</td>
+                            <td><i class="bi bi-eye-fill view-form" data-form="@form.FormId"></i></td>
+                        </tr>
+                        break;
+                }
+            }
+        }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        $(function(){
+            $(".view-form").on("click", viewForm)
+        })
+    </script>
+}

@@ -1,0 +1,108 @@
+﻿{
+  "PdfForm": {
+    "Form": [
+      {
+        "FormTypeId": "1",
+        "Name": "Leave of Absence",
+        "Fields": [
+          {
+            "FieldName": "employeeName",
+            "MaxLength": 30
+          },
+          {
+            "FieldName": "date",
+            "MaxLength": 10
+          },
+          {
+            "FieldName": "ssn",
+            "MaxLength": 12
+          },
+          {
+            "FieldName": "organization",
+            "MaxLength": 107
+          },
+          {
+            "FieldName": "department",
+            "MaxLength": 107
+          },
+          {
+            "FieldName": "purposeForLeave01",
+            "MaxLength": 84
+          },
+          {
+            "FieldName": "purposeForLeave02",
+            "MaxLength": 107
+          },
+          {
+            "FieldName": "purposeForLeave03",
+            "MaxLength": 107
+          },
+          {
+            "FieldName": "datesOfLeave",
+            "MaxLength": 88
+          },
+          {
+            "FieldName": "annualLeaveChk",
+            "MaxLength": 1
+          },
+          {
+            "FieldName": "unpaidAbsenceChk",
+            "MaxLength": 1
+          },
+          {
+            "FieldName": "sickLeaveChk",
+            "MaxLength": 1
+          },
+          {
+            "FieldName": "otherChk",
+            "MaxLength": 1
+          },
+          {
+            "FieldName": "compensatoryTimeOffChk",
+            "MaxLength": 1
+          },
+          {
+            "FieldName": "other01",
+            "MaxLength": 30
+          },
+          {
+            "FieldName": "other02",
+            "MaxLength": 40
+          },
+          {
+            "FieldName": "additionalRemarks01",
+            "MaxLength": 82
+          },
+          {
+            "FieldName": "additionalRemarks02",
+            "MaxLength": 107
+          },
+          {
+            "FieldName": "additionalRemarks03",
+            "MaxLength": 107
+          },
+          {
+            "FieldName": "approvedChk",
+            "MaxLength": 1
+          },
+          {
+            "FieldName": "disapprovedChk",
+            "MaxLength": 1
+          },
+          {
+            "FieldName": "reasonForDisapproval01",
+            "MaxLength": 76
+          },
+          {
+            "FieldName": "reasonForDisapproval02",
+            "MaxLength": 107
+          },
+          {
+            "FieldName": "reasonForDisapproval03",
+            "MaxLength": 107
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Select your role</h1>
+</div>
+
+<div class="container mt-5">
+    <div class="d-flex flex-row justify-content-center gap-3">
+        <a class="btn btn-primary" asp-page="/Employee/Index">Employee</a>
+        @{
+            if (Model.Roles != null)
+            {
+                if (Model.Roles.Contains("Admin"))
+                {
+                    <a class="btn btn-secondary" asp-page="/Supervisor/Index">Supervisor</a>
+                    <a class="btn btn-secondary" asp-page="/Admin/Index">Admin</a>
+                }
+                if (Model.Roles.Contains("Supervisor"))
+                {
+                    <a class="btn btn-secondary" asp-page="/Supervisor/Index">Supervisor</a>
+                }
+            }
+        }
+    </div>
+</div>

@@ -1,0 +1,141 @@
+﻿@page
+@model FillableFormWebApp.Pages.Employee.NewFormModel
+@{
+    ViewData["Title"] = "New Leave Of Absence";
+    string isSuccess = ViewBag.IsSuccess ?? "false";
+}
+
+<form id="form" method="post" asp-action="Create">
+    <h5>Fill new form</h5>
+    <hr />
+    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+    <div class="row">
+        <div class="col-12 col-md-2">
+            <div class="form-floating mb-3">
+                <input class="form-control" aria-required="true" value="@Model.employee.EmployeeId" disabled readonly />
+                <label class="form-label">Employee Id</label>
+            </div>
+        </div>
+        <div class="col-12 col-md-3">
+            <div class="form-floating mb-3">
+                <input class="form-control" aria-required="true" value="@Model.employee.EmployeeName" disabled readonly />
+                <label class="form-label">Name</label>
+            </div>
+        </div>
+        <div class="col-12 col-md-3">
+            <div class="form-floating mb-3">
+                <input class="form-control" aria-required="true" value="@Model.employee.Email" disabled readonly />
+                <label class="form-label">Email</label>
+            </div>
+        </div>
+        <div class="col-12 col-md-2">
+            <div class="form-floating mb-3">
+                <input class="form-control" aria-required="true" value="@Model.employee.Department.DepartmentName" disabled readonly />
+                <label class="form-label">Department</label>
+            </div>
+        </div>
+        <div class="col-12 col-md-2">
+            <div class="form-floating mb-3">
+                <input type="date" class="form-control" aria-required="true" value="@DateTime.Now.ToString("yyyy-MM-dd")" disabled readonly />
+                <label class="form-label">Date</label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <div class="form-floating mb-3">
+                <input asp-for="Input.DatesOfLeave" class="form-control" aria-required="true" maxlength="88" />
+                <label asp-for="Input.DatesOfLeave" class="form-label">Dates Of Leave</label>
+                <span asp-validation-for="Input.DatesOfLeave" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-12 col-md-3">
+            <div class="form-floating mb-3">
+                <select asp-for="Input.TypeOfLeave" asp-items="Model.TypeOfLeave" class="form-select" id="type-of-leave">
+                    <option value="">Choose the type of leave</option>
+                </select>
+                <label asp-for="Input.TypeOfLeave" class="form-label">Type Of Leave</label>
+                <span asp-validation-for="Input.TypeOfLeave" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-12 col-md-3" id="other-col" hidden>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Other" aria-required="false" class="form-control" maxlength="70">
+                <label asp-for="Input.Other" class="form-label">Other</label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <div class="form-floating mb-3">
+                <textarea asp-for="Input.Purpose" rows="3" class="form-control" aria-required="true" maxlength="298" style="min-height: 120px"></textarea>
+                <label asp-for="Input.Purpose" class="form-label">Purpose for Leave</label>
+                <span asp-validation-for="Input.Purpose" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="form-floating mb-3">
+                <textarea asp-for="Input.AdditionalRemarks" rows="3" class="form-control" aria-required="false" maxlength="296" style="min-height: 120px"></textarea>
+                <label asp-for="Input.AdditionalRemarks" class="form-label">Additional Remarks</label>
+                <span asp-validation-for="Input.AdditionalRemarks" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col col-md-3">
+        <div class="form-floating mb-3">
+            <select asp-for="Input.Supervisor" class="form-control" aria-required="true">
+                <option value="">Choose your supervisor</option>
+                @{
+                    foreach (var supervisor in Model.supervisors)
+                    {
+                        <option value="@supervisor.SupervisorId">@supervisor.Employee.EmployeeName</option>
+                    }
+                }
+            </select>
+            <label asp-for="Input.Supervisor" class="form-label">Supervisor</label>
+            <span asp-validation-for="Input.Supervisor" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="w-100 btn btn-lg btn-primary">Submit</button>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function redirect(isSuccess) {
+            if (isSuccess === "true") {
+                $("#form").remove()
+                let message = "Form sent succefully. We will notify your supervisor.";
+                $("#main").append('<div class="alert alert-success" role="alert">' + message + '</div > ')
+                let sec = 3;
+                setInterval(function () {
+                    sec -= 1
+                    $('.alert-success').html('');
+                    $(".alert-success").append(message + "<br /> Redirecting in " + sec)
+                    if (sec == 0) {
+                        return window.location.href = "/Employee" 
+                    }
+                }, 1000);
+            }
+        }
+
+        function typeOfLevaeHidden() {
+            if ($("#type-of-leave option").filter(':selected').val() == "Other") {
+                $("#other-col").attr("hidden", false)
+            } else {
+                $("#other-col").attr("hidden", true)
+            }
+        }
+
+        $(function () {
+            redirect("@isSuccess.ToString().ToLower()");
+
+            $("#type-of-leave").on("change", function () {
+                typeOfLevaeHidden()
+            })
+            typeOfLevaeHidden()
+        });
+    </script>
+}
