@@ -28,7 +28,7 @@ namespace FillableFormWebApp.Controllers
 
         [HttpPut]
         [Route("SendFormSupervisor")]
-        [Authorize(Roles = "Supervisor, Admin")]
+        [Authorize(Roles = "Supervisor")]
         public ActionResult SendFormSupervisor([FromBody]Form form)
         {
             try
