@@ -133,7 +133,7 @@ namespace FillableFormWebApp.Util
                 pdfFormFile = FillMultipleValues(pdfFormFile, form, formFieldName);
             }
 
-            if (form.Decision == "Approve")
+            if (form.Decision == "Approved")
             {
                 if (pdfFormFile.Fields["approvedChk"] is not PdfCheckBoxField approvedChk)
                     throw new NullReferenceException("Approved Check box not found");
