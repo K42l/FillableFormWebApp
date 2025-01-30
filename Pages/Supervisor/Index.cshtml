@@ -292,16 +292,15 @@
                 newColorClass = "table-danger"
             }
 
-            const url = "/Api/Form/SendFormSupervisor";
+            const url = `/Api/Form/AlterFormSupervisor/${formId}`;
             const data = {
-                "FormId": formId,
                 "Decision": decision,
                 "Reason": reason
             }
 
             try{
                 const response = await fetch(url, {
-                    method: "PUT",
+                    method: "PATCH",
                     headers: {
                         "Content-type": "application/json;charset=UTF-8"
                     },
