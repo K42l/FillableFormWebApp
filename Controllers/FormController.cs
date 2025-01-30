@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Options;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using PdfSharp.Charting;
 
@@ -26,10 +27,10 @@ namespace FillableFormWebApp.Controllers
             _pdfUtil = pdfUtil;
         }
 
-        [HttpPut]
-        [Route("SendFormSupervisor")]
+        [HttpPatch]
+        [Route("AlterFormSupervisor/{formId}")]
         [Authorize(Roles = "Supervisor")]
-        public ActionResult SendFormSupervisor([FromBody]Form form)
+        public ActionResult AlterFormSupervisor(int formId, [FromBody]Form form)
         {
             try
             {
@@ -43,7 +44,7 @@ namespace FillableFormWebApp.Controllers
                 if (userSupervisor is null) 
                     return Unauthorized("User not found as a supervisor");
 
-                var oForm = _context.Forms.Where(f => f.FormId == form.FormId).SingleOrDefault();
+                var oForm = _context.Forms.Where(f => f.FormId == formId).SingleOrDefault();
                 if (oForm is null)
                     return NotFound("Form id not found");
 
@@ -57,12 +58,16 @@ namespace FillableFormWebApp.Controllers
                         if (String.IsNullOrEmpty(form.Decision))
                             return BadRequest("Provide a Deicison for disapproval");
                     }
-                                       
-                    oForm.Decision = form.Decision;
-                    oForm.Reason = form.Reason;
-                    oForm.Status = form.Decision + "d";
 
-                    _context.Forms.Update(oForm);
+                    form.Decision = form.Decision + "d";
+                    form.FormId = formId;
+                    form.Status = form.Decision;
+
+                    _context.Forms.Entry(oForm).State = EntityState.Detached;
+                    _context.Forms.Entry(form).Property(p => p.Decision).IsModified = true;
+                    _context.Forms.Entry(form).Property(p => p.Reason).IsModified = true;
+                    _context.Forms.Entry(form).Property(p => p.Status).IsModified = true;
+
                     var result = _context.SaveChanges();
 
                     if (result == 1) 
@@ -78,8 +83,7 @@ namespace FillableFormWebApp.Controllers
             catch (Exception e)
             {
                 return StatusCode(500, e.Message);
-            }
-                        
+            }           
         }
 
         [HttpGet("GetForm/{formId}")]
